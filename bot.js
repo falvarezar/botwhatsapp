@@ -2,7 +2,6 @@ const fs = require('fs');
 const axios = require('axios');
 const { Client, MessageMedia, Buttons, Location, List, LegacySessionAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const { pbkdf2 } = require('crypto');
 const SESSION_FILE_PATH = './session.json'
 let client;
 let sessionData;
