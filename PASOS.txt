@@ -1,6 +1,6 @@
 instalar node.js
 instalar visual code
-crear carpeta botwhatsapp en minuscula
+crear carpeta bot_whatsapp en minuscula
 abrir con VS
 abrir terminal
 npm init --y
@@ -26,9 +26,9 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'botwhatsapp',
+  name:'bot_whatsapp',
   description: 'The nodejs.org example web server.',
-  script: 'c:\\proyectos\\gestion\\botwhatsapp\\bot.js'
+  script: 'c:\\proyectos\\gestion\\bot_whatsapp\\bot.js'
 });
 
 // Listen for the "install" event, which indicates the
@@ -48,9 +48,9 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'botwhatsapp',
+  name:'bot_whatsapp',
   description: 'The nodejs.org example web server.',
-  script: 'c:\\proyectos\\gestion\\botwhatsapp\\bot.js'
+  script: 'c:\\proyectos\\gestion\\bot_whatsapp\\bot.js'
 });
 
 // Listen for the "uninstall" event so we know when it's done.
