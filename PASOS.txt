@@ -1,0 +1,63 @@
+instalar node.js
+instalar visual code
+crear carpeta botwhatsapp en minuscula
+abrir con VS
+abrir terminal
+npm init --y
+npm i express moment --save
+npm i whatsapp-web.js --save 
+npm i cors --save
+npm update -f
+npm update -g //este omitir de momento
+npm i qrcode-terminal --save
+npm i axios --save
+npm install -g node-windows
+npm link node-windows
+desactivar suggestion action en el setting del node (archivo - preferecias - configuracion)
+pegar los archivos en la carpeta
+correr botservice.js
+acceso directo de la carpeta sendmedia en le escritorio
+pegar ahi los acceso directos y correr crear sesion y reiniciar servicio
+
+==================================
+CREAR botservice.js
+==================================
+var Service = require('node-windows').Service;
+
+// Create a new service object
+var svc = new Service({
+  name:'botwhatsapp',
+  description: 'The nodejs.org example web server.',
+  script: 'c:\\proyectos\\gestion\\botwhatsapp\\bot.js'
+});
+
+// Listen for the "install" event, which indicates the
+// process is available as a service.
+svc.on('install',function(){
+  svc.start();
+});
+
+svc.install();
+
+
+=======================================
+CREAR uninstallbot.js
+=======================================
+
+var Service = require('node-windows').Service;
+
+// Create a new service object
+var svc = new Service({
+  name:'botwhatsapp',
+  description: 'The nodejs.org example web server.',
+  script: 'c:\\proyectos\\gestion\\botwhatsapp\\bot.js'
+});
+
+// Listen for the "uninstall" event so we know when it's done.
+svc.on('uninstall',function(){
+  console.log('Uninstall complete.');
+  console.log('The service exists: ',svc.exists);
+});
+
+// Uninstall the service.
+svc.uninstall();
