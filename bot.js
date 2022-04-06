@@ -175,7 +175,6 @@ const webservice = (from, body) => {
                     break;
 
                 case 'JPG':
-                    // funciona tanto para JPG como para PDF de planos                
                     for (i in toJSON) {
                         if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
                             //mediafile = MessageMedia.fromFilePath(`./mediaSend/${toJSON[i]}`);
