@@ -1,27 +1,28 @@
 const fs = require('fs');
 const axios = require('axios');
-const { Client, MessageMedia, Buttons, Location, List, LegacySessionAuth } = require('whatsapp-web.js');
+const { Client, MessageMedia, Buttons, Location, List, LegacySessionAuth, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { Resolver } = require('dns');
 const SESSION_FILE_PATH = './session.json'
 let client;
 let sessionData;
 let chat;
 
-/**
- * Revisamos si tenemos credenciales guardadas para inciar sessio
- * este paso evita volver a escanear el QRCODE
- */
-const withSession = () => {
+
+/*const withSession = () => {
+    console.log('EXISTE UNA SESSION');
     // Si exsite cargamos el archivo con las credenciales
-    sessionData = require(SESSION_FILE_PATH);
+    //sessionData = require(SESSION_FILE_PATH);
     client = new Client({
-        authStrategy: new LegacySessionAuth({
-            session: sessionData
+        authStrategy: new LocalAuth({
+            clientId: "clienteuno"
+            //session: sessionData
         })
     });
 
     client.on('ready', () => {
         console.log('Client is ready!');
+        Resolver(client)
         listenMessage();
     });
 
@@ -30,32 +31,33 @@ const withSession = () => {
     })
 
     client.initialize();
-}
+}*/
 
-/**
- * Generamos un QRCODE para iniciar sesion
- */
-const withOutSession = () => {
+
+const ActivateSession = () => {
     //console.log('No tenemos session guardada');
     client = new Client({
-        authStrategy: new LegacySessionAuth()
+        authStrategy: new LocalAuth({
+            clientId: "clienteuno"
+        })
     });
 
     client.on('qr', qr => {
         qrcode.generate(qr, { small: true });
     });
 
-    client.on('authenticated', (session) => {
+    client.on('authenticated', () => {
         // Guardamos credenciales de de session para usar luego
-        sessionData = session;
-        //sessionJson = './' + sessionData.WAToken1.replace(/[\, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F, G, H, I , J, K, L, M, N, O, P, Q, R, D, Y, U, V, W, X, Y, Z, =, +, -, ", /]/g, '') + '.json'
-        fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
+        //sessionData = session;
+        console.log('Client is ready!');
+        listenMessage();
+        /*fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
             console.log('Client is ready!');
             listenMessage();
             if (err) {
                 console.log(err);
             }
-        });
+        });*/
     });
 
     client.initialize();
@@ -75,7 +77,7 @@ const webservice = (from, body) => {
                 case 'MENU':
                     texto = 'Hola ' + '*' + toJSON.codretorno2 + '*' + ' ' + '_Elija una opción (responder enviando el número):_' + ' en cualquier momento puedes ingresar ' + '*0*' + ' para volver al inicio o enviar un saludo para cambiar de nivel de usuario.' + '\n' + '\n';
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -88,7 +90,7 @@ const webservice = (from, body) => {
                     mediafile = new MessageMedia('image/jpeg', toJSON.codretorno3)
                     texto = 'https://www.digsa.com.py' + '\n' + '\n' + 'Hola ' + '*' + toJSON.codretorno2 + '*' + ' Muchas gracias por contactar con Digsa Inmobiliaria por medio del Bot, en cualquier momento puedes ingresar ' + '*0*' + ' para volver al inicio.' + '\n' + '\n' + '_Elija una opción (responder enviando el número)_:' + '\n';
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i.substring(1, 5)}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -101,7 +103,7 @@ const webservice = (from, body) => {
                     mediafile = new MessageMedia('image/jpeg', toJSON.codretorno3)
                     texto = 'https://www.digsa.com.py' + '\n' + 'Muchas gracias por contactar con Digsa Inmobiliaria por medio del Bot, te invitamos a ver nuestros lotes disponibles financiados hasta en 130 cuotas, en cualquier momento puedes ingresar ' + '*0*' + ' para volver al inicio.' + '\n' + '\n' + '_Elija una opción (responder enviando el número)_:' + '\n';
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i.substring(1, 5)}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -128,7 +130,7 @@ const webservice = (from, body) => {
                     texto = 'ℹ️' + ' ' + '_Ha seleccionado_' + ' ' + ' *' + toJSON.codretorno2 + '* '
                     client.sendMessage(from, texto)
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             cadena = toJSON[i]
                             fraccion = cadena.substring(0, cadena.indexOf(";"))
                             latitud = parseFloat(cadena.substring(cadena.indexOf(";") + 1, cadena.indexOf(",")))
@@ -144,7 +146,7 @@ const webservice = (from, body) => {
                 case 'MENUFOTO':
                     texto = '*_Elija un numero para recibir las fotos:_*' + '\n' + '\n'
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -155,7 +157,7 @@ const webservice = (from, body) => {
                 case 'MENUFRACCION':
                     texto = '*_Elija un numero para recibir el informe:_*' + '\n' + '\n'
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -166,7 +168,7 @@ const webservice = (from, body) => {
                 case 'MENUBICACION':
                     texto = '*_Ingrese el numero de la ciudad para listar las fracciones:_*' + '\n' + '\n'
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -176,7 +178,7 @@ const webservice = (from, body) => {
 
                 case 'JPG':
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             //mediafile = MessageMedia.fromFilePath(`./mediaSend/${toJSON[i]}`);
                             mediafile = new MessageMedia('image/jpeg', toJSON[i])
                             client.sendMessage(from, mediafile)
@@ -195,7 +197,7 @@ const webservice = (from, body) => {
                 case 'NIVELUSU':
                     texto = 'Hola ' + '*' + toJSON.codretorno2 + '*' + ' seleccione la letra para indicar como desea interactuar con el bot.' + '\n'
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                             texto += `*${i.toUpperCase()}*` + ' ➡️ ' + toJSON[i] + '\n';
                         }
                     }
@@ -212,7 +214,7 @@ const webservice = (from, body) => {
                     }
                     client.sendMessage(from, texto1)
                     for (i in toJSON) {
-                        if (i !== 'codretorno' && i !== 'a_estado' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                        if (i !== 'codretorno' && i !== 'a_estado' && i !== 'codretorno2' && i !== 'codretorno3') {
                             datos = toJSON[i].toString();
                             titulo = i.substring(2, 15);
                             texto += `*${titulo.toUpperCase()}*` + ' => ' + `_${datos.toLowerCase()}_` + '\n';
@@ -262,7 +264,7 @@ const webservice = (from, body) => {
                     //mediafile = MessageMedia.fromFilePath(`./mediaSend/pdf/${toJSON.codretorno2}`);
                     if (toJSON.codretorno2 == '') {
                         for (i in toJSON) {
-                            if (i !== 'codretorno' && i !== 'codretorno2'  && i !== 'codretorno3') {
+                            if (i !== 'codretorno' && i !== 'codretorno2' && i !== 'codretorno3') {
                                 mediafile = new MessageMedia('application/pdf', toJSON[i])
                                 client.sendMessage(from, mediafile)
                             }
@@ -304,5 +306,5 @@ const listenMessage = () => {
 /**
  * Revisamos si existe archivo con credenciales!
  */
-(fs.existsSync(SESSION_FILE_PATH)) ? withSession() : withOutSession();
-//withOutSession()
+//(fs.existsSync(SESSION_FILE_PATH)) ? withSession() : withOutSession();
+ActivateSession()
