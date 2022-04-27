@@ -231,6 +231,12 @@ const webservice = (from, body) => {
                     chat.clearState();
                     break;
 
+                case 'USUARIO':
+                    texto = '⚠' + ' UN USUARIO SE COMUNICA CON EL CLIENTE'
+                    //client.sendMessage(from, texto)
+                    chat.clearState();
+                    break;
+
                 case 'MESVENDEDOR':
                 case 'MESLIQUIDACION':
                     texto = 'ℹ️' + ' ' + '_Ha seleccionado_' + ' ' + ' *' + toJSON.codretorno2 + '* ' + '_ingrese el mes Ej.:_' + ' ' + '*9-2021*'
