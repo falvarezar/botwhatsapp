@@ -1,11 +1,10 @@
-const fs = require('fs');
+//const fs = require('fs');
 const axios = require('axios');
-const { Client, MessageMedia, Buttons, Location, List, LegacySessionAuth, LocalAuth } = require('whatsapp-web.js');
+const { Client, MessageMedia, Buttons, Location, List, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const { Resolver } = require('dns');
-const SESSION_FILE_PATH = './session.json'
+//const SESSION_FILE_PATH = './session.json'
 let client;
-let sessionData;
+//let sessionData;
 let chat;
 
 

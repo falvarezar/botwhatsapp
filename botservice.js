@@ -2,9 +2,9 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'bot_whatsapp',
+  name:'botwhatsapp',
   description: 'The nodejs.org example web server.',
-  script: 'd:\\proyectos\\digsa\\whatsapp\\bot_whatsapp\\bot.js'
+  script: 'd:\\proyectos\\digsa\\whatsapp\\botwhatsapp\\bot.js'
 });
 
 // Listen for the "install" event, which indicates the

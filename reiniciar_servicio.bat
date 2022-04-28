@@ -1,3 +1,3 @@
 @ECHO OFF
-net stop bot_whatsapp
-net start bot_whatsapp
+net stop botwhatsapp
+net start botwhatsapp
