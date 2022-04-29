@@ -45,11 +45,15 @@ const ActivateSession = () => {
         qrcode.generate(qr, { small: true });
     });
 
-    client.on('authenticated', () => {
+    client.on('authenticated', (err) => {
         // Guardamos credenciales de de session para usar luego
         //sessionData = session;
         console.log('Client is ready!');
         listenMessage();
+        if (err) {
+            console.log(err);
+        }
+
         /*fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
             console.log('Client is ready!');
             listenMessage();
