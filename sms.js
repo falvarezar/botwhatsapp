@@ -24,17 +24,15 @@ const ActivateSession = () => {
     client.initialize();
 }
 
-function intervalFunc() {
+function EnviarSms() {
     axios.post(`http://localhost/sms/consulta`)
         .then(response => {
-            var toJSON = response.data
-            let text = toJSON.mensaje
-            let number = toJSON.telefono;
-            let chatId = number + "@c.us";
-            client.sendMessage(chatId, text);
+            let text = response.data.mensaje
+            let number = response.data.telefono + "@c.us";
+            client.sendMessage(number, text);
         })
 }
 
-setInterval(intervalFunc, 20000);
+setInterval(EnviarSms, 20000);
 
 ActivateSession()
