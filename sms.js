@@ -1,7 +1,8 @@
 const axios = require('axios');
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require("whatsapp-web.js");
-
+let text = "";
+let number = "";
 
 const ActivateSession = () => {
     client = new Client({
@@ -27,9 +28,12 @@ const ActivateSession = () => {
 function EnviarSms() {
     axios.post(`http://localhost/sms/consulta`)
         .then(response => {
-            let text = response.data.mensaje
-            let number = response.data.telefono + "@c.us";
-            client.sendMessage(number, text);
+            const toJSON = JSON.parse(Buffer.from(response.data,'base64').toString('utf-8'))
+            for (let i in toJSON){
+                text = toJSON[i].mensaje
+                number = toJSON[i].telefono + "@c.us";    
+                client.sendMessage(number, text);
+            }             
         })
 }
 
