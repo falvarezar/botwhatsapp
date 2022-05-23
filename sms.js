@@ -28,7 +28,7 @@ const ActivateSession = () => {
 function EnviarSms() {
     axios.post(`http://localhost/sms/consulta`)
         .then(response => {
-            const toJSON = JSON.parse(Buffer.from(response.data,'base64').toString('utf-8'))
+            const toJSON = JSON.parse(new Buffer.from(response.data,'base64').toString('utf-8'))
             for (let i in toJSON){
                 text = toJSON[i].mensaje
                 number = toJSON[i].telefono + "@c.us";    
@@ -37,6 +37,6 @@ function EnviarSms() {
         })
 }
 
-setInterval(EnviarSms, 20000);
+setInterval(EnviarSms, 50000);
 
 ActivateSession()
