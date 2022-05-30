@@ -8,7 +8,8 @@ const ActivateSession = () => {
     client = new Client({
         authStrategy: new LocalAuth({
             clientId: "clientesms"
-        })
+        }),
+        puppeteer: { headless: true }
     });
 
     client.on('qr', qr => {
